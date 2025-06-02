@@ -1,5 +1,3 @@
-![download (1)](https://github.com/user-attachments/assets/2fb4be49-73c7-4370-a462-2c92ed687e31)# Laporan Proyek Machine Learning - Nama Anda
-
 ## Domain Proyek
 
 Diabetes adalah penyakit metabolik kronis yang berdampak besar pada kualitas hidup dan sistem kesehatan masyarakat. Seiring berjalannya waktu, prevalensi diabetes terus meningkat di berbagai negara. Berdasarkan data WHO, diabetes telah menjadi salah satu penyebab utama kematian dini dan beban biaya kesehatan yang signifikan. Oleh karena itu, penting untuk melakukan deteksi dini terhadap risiko diabetes guna menghindari komplikasi yang lebih parah di masa depan.

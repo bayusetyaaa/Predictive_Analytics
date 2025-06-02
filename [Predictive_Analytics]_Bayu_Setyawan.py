@@ -21,7 +21,7 @@ Proyek ini bertujuan untuk mengembangkan model klasifikasi guna memprediksi risi
 
 **Goals :**
 
-1.   Membangun model klasifikasi untuk memprediksi risiko diabetes ke dalam tiga kategori: Low Risk, Moderate Risk, dan High Risk.
+1.   Membangun model klasifikasi untuk memprediksi risiko diabetes
 2.   Mengidentifikasi fitur-fitur gaya hidup yang memiliki kontribusi paling besar terhadap peningkatan risiko diabetes, berdasarkan hasil pemodelan machine learning.
 
 **Solution Statement :**
@@ -188,7 +188,7 @@ df_clean.hist(bins=50, figsize=(20,15))
 plt.tight_layout()
 plt.show()
 
-"""## Exploratory Data Analysis - Multivariate Analysis"""
+"""## Multivariate Analysis"""
 
 # Mengamati hubungan antar fitur numerik dengan fungsi pairplot()
 sns.pairplot(df_clean, diag_kind = 'kde')
@@ -223,6 +223,9 @@ pca = PCA(n_components= 0.95)
 X_pca = pca.fit_transform(X_resampled)
 
 X_train, X_test, y_train, y_test = train_test_split(X_pca, y_resampled, test_size= 0.2, random_state= 42)
+
+print(f'Total # of sample in train dataset: {len(X_train)}')
+print(f'Total # of sample in test dataset: {len(X_test)}')
 
 """# Training Model
 
@@ -332,7 +335,7 @@ plt.legend(title="Metric")
 plt.tight_layout()
 plt.show()
 
-"""Dari keempat metrik, Decision Tree mengungguli Random Forest dalam seluruh aspek. Hal ini menjadikan Decision Tree sebagai model yang lebih baik secara keseluruhan.
+"""Dari keempat diagram, Decision Tree mengungguli Random Forest dalam seluruh aspek. Hal ini menjadikan Decision Tree sebagai model yang lebih baik secara keseluruhan.
 
 Model Decision Tree adalah model terbaik dalam studi ini karena mampu memberikan:
 
@@ -395,6 +398,6 @@ print("📊 Korelasi fitur terhadap 'Outcome':")
 print(cor_target)
 
 # Ambil fitur dengan korelasi absolut > 0.3
-important_features = cor_target[cor_target.abs() > 0.3]
+important_features = cor_target[cor_target.abs() > 0.25]
 print("\n🔥 Fitur dengan pengaruh signifikan (|korelasi| > 0.3):")
 print(important_features)

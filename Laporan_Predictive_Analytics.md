@@ -41,6 +41,7 @@ pada Project ini saya mengambil Dataset yang diperoleh dari Kaggle:
 
 ## Exporatory Data Analyst (EDA)
 Pada tahap Exploratory Data Analysis (EDA) dilakukan beberapa proses, yaitu pengecekan missing value, duplikasi data, penanganan outlier, univariate analysis, dan multivariate analysis. Dari hasil analisis, diketahui bahwa dataset tersebut tidak mengandung missing value maupun data duplikat.
+1. Mengecek jumlah missing values pada setiap kolom di DataFrame.
 
 ![image](https://github.com/user-attachments/assets/fd1a287e-3e3f-49bb-b34b-c6e6fd5cca78)
 

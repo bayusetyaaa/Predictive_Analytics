@@ -41,13 +41,19 @@ pada Project ini saya mengambil Dataset yang diperoleh dari Kaggle:
 
 ## Exporatory Data Analyst (EDA)
 Pada tahap Exploratory Data Analysis (EDA) dilakukan beberapa proses, yaitu pengecekan missing value, duplikasi data, penanganan outlier, univariate analysis, dan multivariate analysis. Dari hasil analisis, diketahui bahwa dataset tersebut tidak mengandung missing value maupun data duplikat.
-1. Mengecek jumlah missing values pada setiap kolom di DataFrame.
+### Mengecek jumlah missing values pada setiap kolom di DataFrame.
 
 ![image](https://github.com/user-attachments/assets/fd1a287e-3e3f-49bb-b34b-c6e6fd5cca78)
 
+berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
+
+## Mengecek jumlah missing values pada setiap kolom di DataFrame.
+
 ![image](https://github.com/user-attachments/assets/ac166495-63e9-44e6-bcf1-a40fb04e0a98)
 
-### Missing Value
+berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
+
+### Mengecek jumlah outlier pada setiap kolom di DataFrame
 
 ![image](https://github.com/user-attachments/assets/8c5f7480-bd39-4f3a-8531-e13327d372d9)
 
@@ -56,6 +62,7 @@ Hasil deteksi outlier menunjukkan bahwa kolom BloodPressure memiliki jumlah outl
 
 ![image](https://github.com/user-attachments/assets/61489343-0ca1-4694-b79a-d0f423734931)
 
+Data Berhasil dihapus menggunakan metode IQR tersebut
 
 ### Univariative Analysis
 
@@ -78,17 +85,96 @@ Dari visualisasi diatas dapat diinterpretasikan bahwa :
 
 ![image](https://github.com/user-attachments/assets/883abc8f-8ece-4ab8-8dba-4efc5055b86e)
 
-Pada multivariate analysis dilakuan perbandingan korelasi antar fitur. Berdasarkan correlation matrix di atas, fitur yang memiliki korelasi paling kuat terhadap Outcome adalah Glucose (0.49), diikuti oleh BMI (0.27) dan Age (0.27). Korelasi positif menunjukkan bahwa semakin tinggi nilai fitur tersebut, semakin besar kemungkinan hasil prediksi adalah diabetes positif. Sementara fitur lain seperti SkinThickness dan DiabetesPedigreeFunction memiliki korelasi rendah terhadap Outcome, yang berarti pengaruhnya terhadap diagnosis diabetes tidak terlalu signifikan dalam data ini.
+Berdasarkan visualisasi dan matriks korelasi tersebut dapat diketahui bahwa:
+**1. Glucose**
+* **Korelasi tertinggi dengan Outcome (0.49)** → menunjukkan bahwa kadar glukosa yang lebih tinggi berhubungan dengan kemungkinan lebih besar menderita diabetes.
+* Juga berkorelasi dengan **Insulin (0.28)** dan **BloodPressure (0.23)**.
+* Kesimpulan: Glukosa merupakan fitur prediktor penting untuk Outcome.
+
+
+ **BMI (Body Mass Index)**
+
+* Korelasi sedang dengan **Outcome (0.27)**.
+* Korelasi positif dengan **SkinThickness (0.38)** dan **BloodPressure (0.29)**.
+* Kesimpulan: BMI juga punya peran penting dalam memprediksi diabetes.
+
+
+ **Pregnancies (Jumlah Kehamilan)**
+
+* Korelasi sedang dengan **Age (0.58)** → logis karena semakin tua biasanya jumlah kehamilan meningkat.
+* Korelasi sedang dengan **Outcome (0.24)**.
+* Kesimpulan: Fitur ini lebih relevan secara demografis, tapi tetap memberi informasi dalam klasifikasi.
+
+ **Age (Usia)**
+
+* Korelasi sedang dengan **Pregnancies (0.58)** dan **Outcome (0.27)**.
+* Korelasi rendah dengan fitur lain.
+* Kesimpulan: Usia juga relevan untuk klasifikasi, tapi tidak sekuat Glucose atau BMI.
+
+
+**Insulin**
+
+* Korelasi kuat dengan **SkinThickness (0.48)**.
+* Korelasi sedang dengan **Glucose (0.28)**.
+
+**SkinThickness**
+
+* Korelasi sedang dengan **Insulin (0.48)** dan **BMI (0.38)**.
+* Korelasi rendah dengan Outcome (0.04).
+
+**BloodPressure**
+
+* Korelasi sedang dengan **BMI (0.29)** dan **Age (0.35)**.
+* Korelasi rendah dengan Outcome (0.17).
+
+**DiabetesPedigreeFunction**
+
+* Korelasi sangat rendah dengan fitur lain.
+* Korelasi rendah dengan Outcome (0.17).
 
 ## Data Preparation
-Pada bagian ini saya melakukan Train test split, yaitu membagi dataset menjadi data latih dan data uji untuk nantinya digunakan dalam model.
+Melakukan preprocessing data sebelum pelatihan model
 
-![image](https://github.com/user-attachments/assets/d1e0bcef-4ced-4e99-9ce6-1e3e18925a6c)
+![image](https://github.com/user-attachments/assets/761d56a4-d924-4190-8677-248e7c80204e)
 
-Terdapat dataset train sebanyak 702 data dan dataset test sebanyak 176 data yang akan digunakan untuk modeling
+Pada tahap Preperation dilakukan proses berikut:
+
+MinMaxScaler untuk menormalkan fitur ke rentang [0, 1]
+SMOTE untuk mengatasi ketidakseimbangan kelas dengan oversampling
+PCA untuk mereduksi dimensi dengan mempertahankan 95% variansi
+Data dibagi menjadi data latih dan data uji dengan rasio 80:20
+Berdasarkan hasil preprocessing, data telah dinormalisasi, diseimbangkan, direduksi dimensinya, dan dibagi menjadi data pelatihan dan pengujian sehingga siap untuk pelatihan model machine learning.
 
 ## Modeling
 Pada tahap ini, kita akan mengembangkan model machine learning dengan dua algoritma. Kemudian, kita akan mengevaluasi performa masing-masing algoritma dan menentukan algoritma mana yang memberikan hasil prediksi terbaik. Kedua algoritma yang akan kita gunakan, antara lain Random Forest dan Decission Tree.
+
+## Random Forest
+
+![image](https://github.com/user-attachments/assets/14b2b18c-faf6-4c94-9bc9-48f14e43c5e9)
+
+Berdasarkan model random forest tersebut dapat diketahui bahwa:
+
+*   Random Forest dengan 100 estimator, batas kedalaman 10, dan minimal 5 sampel per daun
+*   Akurasi training: 0.93, testing: 0.79, validasi silang rata-rata: 0.80
+*   Performa seimbang antara precision dan recall untuk kedua kelas
+*   Classification report menunjukkan F1-score sebesar 0.79 untuk kedua kelas
+
+✅ Kesimpulan:
+Model Random Forest menunjukkan performa yang baik dengan akurasi data testing sebesar 0.79, tidak jauh berbeda dari skor validasi silang. Ini mengindikasikan bahwa model cukup general dan tidak overfitting. Precision dan recall seimbang untuk kedua kelas, menjadikannya cocok untuk digunakan dalam kasus klasifikasi biner seperti prediksi diabetes.
+
+## Decission Tree
+
+![image](https://github.com/user-attachments/assets/e94c07ad-7b27-46c0-9d80-0ee8cd98c8d8)
+
+Berdasarkan model Desiccion Tree tersebut dapat diketahui bahwa:
+*   Decision Tree dengan maksimal kedalaman 10
+*   Akurasi training: 0.97, testing: 0.78, validasi silang rata-rata: 0.77
+*   F1-score untuk kelas 0 dan 1 seimbang, sekitar 0.78–0.79
+*   Recall tinggi pada kelas 1 (0.83), berguna untuk deteksi kasus positif
+
+✅ Kesimpulan:
+Model Decision Tree memiliki akurasi training yang sangat tinggi (0.97) namun menurun pada data testing (0.78), menunjukkan kemungkinan overfitting.
+Namun, metrik klasifikasi menunjukkan performa yang masih seimbang dan layak digunakan, terutama jika fokus pada recall untuk kasus positif. Skor validasi silang sebesar 0.77 mendukung konsistensi model pada data baru.
 
 ## Evaluation
 ### Evaluation Random Forest

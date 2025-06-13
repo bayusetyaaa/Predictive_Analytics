@@ -55,17 +55,6 @@ berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
 
 berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
 
-### Mengecek jumlah outlier pada setiap kolom di DataFrame
-
-![image](https://github.com/user-attachments/assets/8c5f7480-bd39-4f3a-8531-e13327d372d9)
-
-![download (2)](https://github.com/user-attachments/assets/e5b4432a-c2d5-4820-a9c7-b6bd1c516047)
-Hasil deteksi outlier menunjukkan bahwa kolom BloodPressure memiliki jumlah outlier terbanyak (45), diikuti oleh Insulin (34) dan DiabetesPedigreeFunction (29). Kolom seperti Pregnancies, Glucose, BMI, dan Age juga memiliki sejumlah outlier, meskipun lebih sedikit. Sementara itu, tidak ditemukan outlier pada kolom Outcome, menandakan distribusi label target cukup konsisten. sehingga dikakuan penghapusan duplikasi data mengguanakan metode IQR seperti dibawah
-
-![image](https://github.com/user-attachments/assets/61489343-0ca1-4694-b79a-d0f423734931)
-
-Data Berhasil dihapus menggunakan metode IQR tersebut
-
 ### Univariative Analysis
 
 ![download (1)](https://github.com/user-attachments/assets/b1566f3e-7e66-48a5-8c37-4a556d4714dd)
@@ -135,7 +124,21 @@ Berdasarkan visualisasi dan matriks korelasi tersebut dapat diketahui bahwa:
 * Korelasi rendah dengan Outcome (0.17).
 
 ## Data Preparation
-Melakukan preprocessing data sebelum pelatihan model
+
+### Mengecek jumlah outlier pada setiap kolom di DataFrame
+
+![image](https://github.com/user-attachments/assets/8c5f7480-bd39-4f3a-8531-e13327d372d9)
+
+![download (2)](https://github.com/user-attachments/assets/e5b4432a-c2d5-4820-a9c7-b6bd1c516047)
+
+Hasil deteksi outlier menunjukkan bahwa kolom BloodPressure memiliki jumlah outlier terbanyak (45), diikuti oleh Insulin (34) dan DiabetesPedigreeFunction (29). Kolom seperti Pregnancies, Glucose, BMI, dan Age juga memiliki sejumlah outlier, meskipun lebih sedikit. Sementara itu, tidak ditemukan outlier pada kolom Outcome, menandakan distribusi label target cukup konsisten. sehingga dikakuan penghapusan duplikasi data mengguanakan metode IQR seperti dibawah
+
+![image](https://github.com/user-attachments/assets/61489343-0ca1-4694-b79a-d0f423734931)
+
+Data Berhasil dihapus menggunakan metode IQR tersebut
+
+### Melakukan Train-test split
+Melakukan Train-test split data sebelum pelatihan model
 
 ![image](https://github.com/user-attachments/assets/761d56a4-d924-4190-8677-248e7c80204e)
 
@@ -151,6 +154,9 @@ Berdasarkan hasil preprocessing, data telah dinormalisasi, diseimbangkan, diredu
 Pada tahap ini, kita akan mengembangkan model machine learning dengan dua algoritma. Kemudian, kita akan mengevaluasi performa masing-masing algoritma dan menentukan algoritma mana yang memberikan hasil prediksi terbaik. Kedua algoritma yang akan kita gunakan, antara lain Random Forest dan Decission Tree.
 
 ## Random Forest
+Random Forest merupakan pengembangan dari Decision Tree yang menggabungkan banyak pohon keputusan (ensemble). Setiap pohon dilatih dengan subset data yang berbeda dan memilih fitur secara acak. Hasil akhirnya didapat dari mayoritas vote (bagging).
+1. Lebih stabil dan akurat dibanding satu pohon tunggal.
+2. Mengurangi risiko overfitting dengan cara voting dari banyak pohon.
 
 ![image](https://github.com/user-attachments/assets/14b2b18c-faf6-4c94-9bc9-48f14e43c5e9)
 
@@ -165,6 +171,9 @@ Berdasarkan model random forest tersebut dapat diketahui bahwa:
 Model Random Forest menunjukkan performa yang baik dengan akurasi data testing sebesar 0.79, tidak jauh berbeda dari skor validasi silang. Ini mengindikasikan bahwa model cukup general dan tidak overfitting. Precision dan recall seimbang untuk kedua kelas, menjadikannya cocok untuk digunakan dalam kasus klasifikasi biner seperti prediksi diabetes.
 
 ## Decission Tree
+Decision Tree adalah algoritma klasifikasi yang membagi data ke dalam cabang-cabang berdasarkan fitur-fitur tertentu. Setiap node mewakili suatu kondisi (threshold), dan setiap daun menunjukkan hasil prediksi. Prosesnya mirip seperti menjawab pertanyaan berurutan hingga diperoleh keputusan akhir.
+1. Mudah dipahami dan divisualisasikan.
+2. Rentan overfitting jika tidak dibatasi kedalamannya.
 
 ![image](https://github.com/user-attachments/assets/e94c07ad-7b27-46c0-9d80-0ee8cd98c8d8)
 

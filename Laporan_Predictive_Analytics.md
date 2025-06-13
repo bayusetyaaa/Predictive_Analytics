@@ -27,6 +27,8 @@ Semua poin di atas harus diuraikan dengan jelas. Anda bebas menuliskan berapa pe
 pada Project ini saya mengambil Dataset yang diperoleh dari Kaggle:
 🔗 [Diabetes Dataset – Akshay Dattatray Khare](https://www.kaggle.com/datasets/akshaydattatraykhare/diabetes-dataset)
 
+Dataset terdiri atas 768 baris dan 9 kolom
+
 ### Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
 
 * Pregnancies : Jumlah kehamilan yang pernah dialami.

@@ -51,6 +51,8 @@ Dataset ini berisi informasi medis dari pasien perempuan keturunan Pima Indian y
 * `Outcome` : Label target (0 = tidak diabetes, 1 = diabetes).
 
 # Data Loading
+
+Import Library
 """
 
 # Commented out IPython magic to ensure Python compatibility.
@@ -60,11 +62,17 @@ import pandas as pd
 # %matplotlib inline
 import seaborn as sns
 
+"""Import Dataset dari Kaggle"""
+
 #!/bin/bash
 !curl -L -o diabetes-dataset.zip\
   https://www.kaggle.com/api/v1/datasets/download/akshaydattatraykhare/diabetes-dataset
 
+"""melakukan unzip dataset yang diimport"""
+
 !unzip diabetes-dataset.zip
+
+"""Membaca file CSV bernama 'diabetes.csv' dan menyimpannya ke dalam DataFrame bernama df"""
 
 df = pd.read_csv('diabetes.csv')
 df.head()
@@ -91,21 +99,130 @@ Berdasarkan informasi dari Kaggle, variabel-variabel pada Diamond dataset adalah
 * `DiabetesPedigreeFunction` : Nilai fungsi silsilah diabetes (menggambarkan kemungkinan diabetes berdasarkan riwayat keluarga).
 * `Age` : Usia pasien (tahun).
 * `Outcome` : Label target (0 = tidak diabetes, 1 = diabetes).
+
+Menampilkan informasi umum tentang DataFrame, termasuk jumlah entri, jumlah kolom, nama kolom, tipe data, dan jumlah nilai non-null
 """
 
 df.info()
 
+"""Menampilkan statistik deskriptif dari setiap kolom numerik dalam DataFrame,termasuk nilai count, mean, std (standard deviation), min, 25%, 50% (median), 75%, dan max."""
+
+df.shape
+
+"""Melihat statistik deskriptif dari dataset."""
+
 df.describe()
 
-"""## Menangani Missing Value"""
+"""Menampilkan jumlah data (count), nilai rata-rata (mean), standar deviasi (std), nilai minimum, kuartil (25%, 50%, 75%), dan nilai maksimum untuk setiap kolom numerik.
+
+## Menangani Missing Value
+
+Mengecek jumlah missing values pada setiap kolom di DataFrame.
+"""
 
 df.isnull().sum()
 
-"""## Menangani Duplicate"""
+"""berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
+
+## Menangani Duplicate
+
+Mengecek jumlah missing values pada setiap kolom di DataFrame.
+"""
 
 df.duplicated().sum()
 
-"""## Menangani Outliers"""
+"""berdasarkan hasil pengecekan dapat diinfokan bahwa tidak terdapat missing value
+
+## Univariate Analysis
+
+Menampilkan distribusi data untuk setiap fitur numerik dalam bentuk histogram.
+"""
+
+df_clean.hist(bins=50, figsize=(20,15))
+plt.tight_layout()
+plt.show()
+
+"""## Multivariate Analysis
+
+Mengamati hubungan antar fitur numerik dengan fungsi pairplot()
+"""
+
+sns.pairplot(df_clean, diag_kind = 'kde')
+
+"""Menampilkan matriks korelasi antar fitur numerik dalam bentuk heatmap"""
+
+plt.figure(figsize=(10, 8))
+correlation_matrix = df_clean.corr().round(2)
+
+# Untuk menge-print nilai di dalam kotak, gunakan parameter anot=True
+sns.heatmap(data=correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5, )
+plt.title("Correlation Matrix untuk Fitur Numerik ", size=20)
+
+"""Berdasarkan visualisasi dan matriks korelasi tersebut dapat diketahui bahwa:
+**1. Glucose**
+* **Korelasi tertinggi dengan Outcome (0.49)** → menunjukkan bahwa kadar glukosa yang lebih tinggi berhubungan dengan kemungkinan lebih besar menderita diabetes.
+* Juga berkorelasi dengan **Insulin (0.28)** dan **BloodPressure (0.23)**.
+* Kesimpulan: Glukosa merupakan fitur prediktor penting untuk Outcome.
+
+
+ **BMI (Body Mass Index)**
+
+* Korelasi sedang dengan **Outcome (0.27)**.
+* Korelasi positif dengan **SkinThickness (0.38)** dan **BloodPressure (0.29)**.
+* Kesimpulan: BMI juga punya peran penting dalam memprediksi diabetes.
+
+
+ **Pregnancies (Jumlah Kehamilan)**
+
+* Korelasi sedang dengan **Age (0.58)** → logis karena semakin tua biasanya jumlah kehamilan meningkat.
+* Korelasi sedang dengan **Outcome (0.24)**.
+* Kesimpulan: Fitur ini lebih relevan secara demografis, tapi tetap memberi informasi dalam klasifikasi.
+
+ **Age (Usia)**
+
+* Korelasi sedang dengan **Pregnancies (0.58)** dan **Outcome (0.27)**.
+* Korelasi rendah dengan fitur lain.
+* Kesimpulan: Usia juga relevan untuk klasifikasi, tapi tidak sekuat Glucose atau BMI.
+
+
+**Insulin**
+
+* Korelasi kuat dengan **SkinThickness (0.48)**.
+* Korelasi sedang dengan **Glucose (0.28)**.
+
+**SkinThickness**
+
+* Korelasi sedang dengan **Insulin (0.48)** dan **BMI (0.38)**.
+* Korelasi rendah dengan Outcome (0.04).
+
+**BloodPressure**
+
+* Korelasi sedang dengan **BMI (0.29)** dan **Age (0.35)**.
+* Korelasi rendah dengan Outcome (0.17).
+
+
+**DiabetesPedigreeFunction**
+
+* Korelasi sangat rendah dengan fitur lain.
+* Korelasi rendah dengan Outcome (0.17).
+
+# Data Preparation
+
+## Menangani Outliers
+
+Dari visualisasi diatas dapat diinterpretasikan bahwa :
+* Pregnancies: Mayoritas responden memiliki 0–2 kehamilan, dengan puncaknya pada 1 kehamilan.
+* Glucose: Mayoritas kadar glukosa berada di kisaran 90–130 mg/dL, dengan puncak sekitar 110–120 mg/dL.
+* BloodPressure: Mayoritas tekanan darah berada di kisaran 60–80 mmHg, dengan puncak sekitar 70 mmHg.
+* SkinThickness: Distribusi cukup tersebar, namun terdapat banyak nilai 0 yang menandakan kemungkinan data kosong/tidak diukur. Nilai terbanyak setelah 0 berada pada kisaran 20–40 mm.
+* Insulin: Banyak nilai 0 (kemungkinan data kosong/tidak diukur), dan selebihnya tersebar dari 0 hingga >300. Puncak setelah 0 ada di kisaran 100–200.
+* BMI: Mayoritas indeks massa tubuh berada di kisaran 25–40, dengan puncak sekitar 30–35. Artinya sebagian besar tergolong kelebihan berat badan atau obesitas ringan.
+* DiabetesPedigreeFunction: Mayoritas memiliki nilai di bawah 0.5, dengan puncak antara 0.1–0.3. Ini menunjukkan mayoritas peserta memiliki riwayat diabetes keluarga yang rendah hingga sedang.
+* Age: Mayoritas peserta berusia 20–40 tahun, dengan puncak sekitar 20–30 tahun.
+* Outcome (Diabetes):Mayoritas responden tidak menderita diabetes (nilai 0), sedangkan sebagian kecil (sekitar 1/3) memiliki diabetes (nilai 1).
+
+Mengecek jumlah outlier pada setiap kolom di DataFrame menggunakan metode IQR
+"""
 
 # Deteksi Outlier dengan metode IQR
 def detect_outliers(data):
@@ -122,7 +239,7 @@ def detect_outliers(data):
     return outlier_summary
 
 # Menjalankan fungsi untuk dataset (tanpa kolom target)
-indicators_columns = df.drop(columns=['risk_score'], errors='ignore')
+indicators_columns = df.drop(columns=['Outcome'], errors='ignore')
 outlier_counts = detect_outliers(indicators_columns)
 
 # Menampilkan jumlah outlier per kolom
@@ -130,8 +247,14 @@ print("Jumlah outlier per kolom:")
 for col, count in outlier_counts.items():
     print(f"{col}: {count}")
 
-# Mengelompokkan fitur numerik kecuali kolom target 'outcome'
+"""Hasil deteksi outlier menunjukkan bahwa kolom BloodPressure memiliki jumlah outlier terbanyak (45), diikuti oleh Insulin (34) dan DiabetesPedigreeFunction (29). Kolom seperti Pregnancies, Glucose, BMI, dan Age juga memiliki sejumlah outlier, meskipun lebih sedikit. Sementara itu, tidak ditemukan outlier pada kolom Outcome, menandakan distribusi label target cukup konsisten.
+
+Mengelompokkan fitur numerik kecuali kolom target 'outcome'
+"""
+
 indicators_feature = df.select_dtypes(include=np.number).drop(columns=['Outcome'], errors='ignore').columns
+
+"""menampilkan visualisasi outlier dari masing-masing kolom"""
 
 import math
 
@@ -160,6 +283,8 @@ for j in range(len(indicators_feature), len(axes)):
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 plt.show()
 
+"""Menghapus outlier dengan metode IQR"""
+
 # Fungsi untuk menghapus outlier dengan metode IQR
 df_clean = df.copy()
 def remove_outliers(df, columns):
@@ -182,27 +307,11 @@ print("Outlier Berhasil Dihapus")
 print(f"Jumlah baris sebelum data cleansing: {df.shape[0]}")
 print(f"Jumlah baris sesudah data cleansing: {df_clean.shape[0]}")
 
-"""## Univariate Analysis"""
+"""Setelah penghapusan outline menggunakan metode IQR jumlah baris menjadi berkurang dari jumlah baris sebelum data cleansing adalah 768 menjadi 636 Jumlah baris sesudah data cleansing
 
-df_clean.hist(bins=50, figsize=(20,15))
-plt.tight_layout()
-plt.show()
+## Train-test split
 
-"""## Multivariate Analysis"""
-
-# Mengamati hubungan antar fitur numerik dengan fungsi pairplot()
-sns.pairplot(df_clean, diag_kind = 'kde')
-
-plt.figure(figsize=(10, 8))
-correlation_matrix = df_clean.corr().round(2)
-
-# Untuk menge-print nilai di dalam kotak, gunakan parameter anot=True
-sns.heatmap(data=correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5, )
-plt.title("Correlation Matrix untuk Fitur Numerik ", size=20)
-
-"""# Data Preparation
-
-## Train Test Split
+Melakukan Train-test split data sebelum pelatihan model
 """
 
 from sklearn.model_selection import train_test_split
@@ -227,7 +336,16 @@ X_train, X_test, y_train, y_test = train_test_split(X_pca, y_resampled, test_siz
 print(f'Total # of sample in train dataset: {len(X_train)}')
 print(f'Total # of sample in test dataset: {len(X_test)}')
 
-"""# Training Model
+"""Pada tahap Preperation dilakukan proses berikut:
+
+*   MinMaxScaler untuk menormalkan fitur ke rentang [0, 1]
+*   SMOTE untuk mengatasi ketidakseimbangan kelas dengan oversampling
+*   PCA untuk mereduksi dimensi dengan mempertahankan 95% variansi
+*   Data dibagi menjadi data latih dan data uji dengan rasio 80:20
+
+Berdasarkan hasil preprocessing, data telah dinormalisasi, diseimbangkan, direduksi dimensinya, dan dibagi menjadi data pelatihan dan pengujian sehingga siap untuk pelatihan model machine learning.
+
+# Training Model
 
 Pada tahap ini, kita akan mengembangkan model machine learning dengan dua algoritma. Kemudian, kita akan mengevaluasi performa masing-masing algoritma dan menentukan algoritma mana yang memberikan hasil prediksi terbaik. Kedua algoritma yang akan kita gunakan, antara lain:
 
@@ -235,6 +353,8 @@ Pada tahap ini, kita akan mengembangkan model machine learning dengan dua algori
 - Decission Tree
 
 ## Random Forest
+
+Melatih model Random Forest dan mengevaluasi performanya
 """
 
 from sklearn.ensemble import RandomForestClassifier
@@ -255,7 +375,20 @@ print(f"Accuracy Data Testing: {test_acc:.2f}")
 print(f"Mean CV Score:{cv_scores.mean():.2f}")
 print(classification_report(y_test, y_test_rf))
 
-"""## Decission Tree"""
+"""Berdasarkan model random forest tersebut dapat diketahui bahwa:
+
+*   Random Forest dengan 100 estimator, batas kedalaman 10, dan minimal 5 sampel per daun
+*   Akurasi training: 0.93, testing: 0.79, validasi silang rata-rata: 0.80
+*   Performa seimbang antara precision dan recall untuk kedua kelas
+*   Classification report menunjukkan F1-score sebesar 0.79 untuk kedua kelas
+
+✅ Kesimpulan:
+Model Random Forest menunjukkan performa yang baik dengan akurasi data testing sebesar 0.79, tidak jauh berbeda dari skor validasi silang. Ini mengindikasikan bahwa model cukup general dan tidak overfitting. Precision dan recall seimbang untuk kedua kelas, menjadikannya cocok untuk digunakan dalam kasus klasifikasi biner seperti prediksi diabetes.
+
+## Decission Tree
+
+Melatih model Decission Tree dan mengevaluasi performanya
+"""
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
@@ -274,14 +407,28 @@ print(f"Accuracy Data Testing: {test_acc_dt:.2f}")
 print(f"Mean CV Score:{cv_scores_dt.mean():.2f}")
 print(classification_report(y_test, y_test_dt))
 
-"""# Perbandingan Model"""
+"""Berdasarkan model Desiccion Tree tersebut dapat diketahui bahwa:
+*   Decision Tree dengan maksimal kedalaman 10
+*   Akurasi training: 0.97, testing: 0.78, validasi silang rata-rata: 0.77
+*   F1-score untuk kelas 0 dan 1 seimbang, sekitar 0.78–0.79
+*   Recall tinggi pada kelas 1 (0.83), berguna untuk deteksi kasus positif
 
-# Perbandingan akurasi
+✅ Kesimpulan:
+Model Decision Tree memiliki akurasi training yang sangat tinggi (0.97) namun menurun pada data testing (0.78), menunjukkan kemungkinan overfitting.
+Namun, metrik klasifikasi menunjukkan performa yang masih seimbang dan layak digunakan, terutama jika fokus pada recall untuk kasus positif. Skor validasi silang sebesar 0.77 mendukung konsistensi model pada data baru.
+
+# Perbandingan Model
+
+Perbandingan akurasi model
+"""
+
 acc_rf = accuracy_score(y_test, y_test_rf)
 acc_dt = accuracy_score(y_test, y_test_dt)
 
 print(f"Akurasi Random Forest: {acc_rf:.3f}")
 print(f"Akurasi Decision Tree: {acc_dt:.3f}")
+
+"""Visualisasi erbandingan akurasi model"""
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
